@@ -5,9 +5,9 @@ class Book:
     Each book has a unique ID and other descriptive attributes.
     """
 
-    def __init__(self, title, author, year, publisher, total_copies, publication_date):
+    def __init__(self, title, author, year, publisher, total_copies, publication_date, book_id=None):
         try:
-            self.book_id = str(uuid.uuid4())                     # Auto-generated unique ID
+            self.book_id = book_id or str(uuid.uuid4())                     # Auto-generated unique ID
             self.title = title
             self.author = author
             self.year = int(year)
@@ -24,6 +24,9 @@ class Book:
 
     def set_author(self, author):
         self.author = author
+        
+    def set_quantity(self, quantity):
+        self.total_copies = quantity
 
     def set_year(self, year):
         try:
@@ -62,9 +65,18 @@ class Book:
 
     def get_total_copies(self):
         return self.total_copies
+    
+    def get_quantity(self):
+        return self.total_copies
 
     def get_available_copies(self):
         return self.available_copies
 
     def get_publication_date(self):
         return self.publication_date
+    
+class BorrowRecord:
+    def __init__(self, record_id, user_id, book_id):
+        self.record_id = record_id
+        self.user_id = user_id
+        self.book_id = book_id
