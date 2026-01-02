@@ -1,56 +1,75 @@
 import uuid
+from datetime import date
+
+
 class Book:
     """
     Represents a single book in the library system.
-    Each book has a unique ID and other descriptive attributes.
     """
 
-    def __init__(self, title, author, year, publisher, total_copies, publication_date, book_id=None):
+    def __init__(self, title, author, year, publisher, total_copies, publication_date):
+        """
+        Constructor to create a new book record.
+        """
+
         try:
-            self.book_id = book_id or str(uuid.uuid4())                     # Auto-generated unique ID
-            self.title = title
-            self.author = author
-            self.year = int(year)
-            self.publisher = publisher
-            self.total_copies = int(total_copies)
-            self.available_copies = int(total_copies)
-            self.publication_date = publication_date
+            self.book_id = str(uuid.uuid4())  # Randomly generated book ID
+            self.set_title(title)
+            self.set_author(author)
+            self.set_year(year)
+            self.set_publisher(publisher)
+            self.set_total_copies(total_copies)
+            self.available_copies = self.total_copies
+            self.set_publication_date(publication_date)
+
         except Exception as e:
             raise ValueError(f"Error creating book: {e}")
 
-    # -------------- SETTER METHODS --------------
-    def set_title(self, title):
+    # ---------------- SETTER METHODS ----------------
+
+    def set_title(self, title) -> str:
+        if not title:
+            raise ValueError("Title cannot be empty")
         self.title = title
 
     def set_author(self, author):
+        if not author:
+            raise ValueError("Author cannot be empty")
         self.author = author
-        
-    def set_quantity(self, quantity):
-        self.total_copies = quantity
 
     def set_year(self, year):
-        try:
-            self.year = int(year)
-        except Exception:
-            raise ValueError("Year must be a number")
+        year = int(year)
+        if year < 0:
+            raise ValueError("Year must be positive")
+        self.year = year
 
     def set_publisher(self, publisher):
+        if not publisher:
+            raise ValueError("Publisher cannot be empty")
         self.publisher = publisher
 
     def set_total_copies(self, copies):
-        try:
-            copies = int(copies)
-            if copies < 0:
-                raise ValueError("Copies cannot be negative")
-            self.total_copies = copies
-            self.available_copies = copies
-        except Exception:
-            raise ValueError("Copies must be a valid number")
+        copies = int(copies)
+        if copies < 0:
+            raise ValueError("Number of copies cannot be negative")
+        self.total_copies = copies
 
-    def set_publication_date(self, pub_date):
-        self.publication_date = pub_date
+    def set_available_copies(self, copies):
+        copies = int(copies)
+        if copies < 0 or copies > self.total_copies:
+            raise ValueError("Invalid number of available copies")
+        self.available_copies = copies
 
-    # -------------- GETTER METHODS --------------
+    def set_publication_date(self, publication_date):
+        if not isinstance(publication_date, date):
+            raise TypeError("Publication date must be a date object")
+        self.publication_date = publication_date
+
+    # ---------------- GETTER METHODS ----------------
+
+    def get_book_id(self):
+        return self.book_id
+
     def get_title(self):
         return self.title
 
@@ -65,18 +84,9 @@ class Book:
 
     def get_total_copies(self):
         return self.total_copies
-    
-    def get_quantity(self):
-        return self.total_copies
 
     def get_available_copies(self):
         return self.available_copies
 
     def get_publication_date(self):
         return self.publication_date
-    
-class BorrowRecord:
-    def __init__(self, record_id, user_id, book_id):
-        self.record_id = record_id
-        self.user_id = user_id
-        self.book_id = book_id

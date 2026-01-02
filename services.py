@@ -8,7 +8,11 @@ class AuthService:
         self._seed_admin()
 
     def _seed_admin(self):
-        self.users["admin"] = User("admin", "System Admin", "admin@lib.com", "admin123", role="admin")
+        self.users["admin"] = User(
+            "admin", "System", "Admin", "17A",
+            "manchester street", "PO:234",
+            "admin@lib.com", "2000-01-01"
+            )
 
     def register(self, user_id, name, email, password):
         if user_id in self.users:
